@@ -1,0 +1,38 @@
+% Initial state: monkey is at the floor, box is at the floor, banana is on the ceiling.
+initial_state(state(at_floor, at_floor, on_ceiling)).
+
+% Define possible actions to transition between states
+% Move monkey across the room
+move(state(at_floor, M, B), grasp, state(at_box, M, B)) :-
+    write('Monkey moves from floor to box.'), nl.
+
+% Climb box
+move(state(at_box, M, B), grasp, state(on_box, M, B)) :-
+    write('Monkey climbs the box.'), nl.
+
+% Push box across the room
+move(state(P, at_floor, at_floor), push, state(P, at_box, at_ceiling)) :-
+    write('Monkey pushes the box from floor to ceiling.'), nl.
+
+% Grasp banana
+move(state(on_box, on_box, on_ceiling), grasp, state(on_box, on_box, has_banana)) :-
+    write('Monkey grasps the banana.'), nl.
+
+% Predicate to check if a state is the goal state
+goal_state(state(_, _, has_banana)).
+
+% Perform the search using depth-first search
+search(State, []) :-
+    goal_state(State).
+
+search(State, [Move|Moves]) :-
+    move(State, Move, NextState),
+    search(NextState, Moves).
+
+% Predicate to start the search
+solve(Moves) :-
+    initial_state(InitialState),
+    search(InitialState, Moves).
+
+% Example usage
+?- solve(Moves).

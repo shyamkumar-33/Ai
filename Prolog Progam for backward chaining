@@ -1,0 +1,33 @@
+% Knowledge base: Facts and rules
+
+% Facts
+bird(penguin).
+bird(sparrow).
+bird(eagle).
+mammal(dog).
+mammal(cat).
+mammal(human).
+
+% Rules
+can_fly(X) :- bird(X).
+has_fur(X) :- mammal(X).
+can_swim(X) :- bird(X), not(can_fly(X)).
+can_swim(X) :- mammal(X).
+
+% Backward chaining
+is_bird(X) :- bird(X), write(X), write(' is a bird.'), nl.
+is_bird(X) :- can_fly(X), write(X), write(' is a bird.'), nl.
+is_mammal(X) :- mammal(X), has_fur(X), write(X), write(' is a mammal.'), nl.
+is_mammal(X) :- mammal(X), not(has_fur(X)), write(X), write(' is a mammal.'), nl.
+can_swim(X) :- can_swim(X), write(X), write(' can swim.'), nl.
+
+% Queries
+:- initialization(main).
+
+main :-
+    write('Enter an animal: '),
+    read(Animal),
+    is_bird(Animal),
+    is_mammal(Animal),
+    can_swim(Animal),
+    halt.

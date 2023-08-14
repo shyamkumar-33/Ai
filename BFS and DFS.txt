@@ -1,0 +1,48 @@
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, vertex, neighbor):
+        if vertex in self.graph:
+            self.graph[vertex].append(neighbor)
+        else:
+            self.graph[vertex] = [neighbor]
+
+    def bfs(self, start_vertex):
+        visited = set()
+        queue = [start_vertex]
+        while queue:
+            vertex = queue.pop(0)
+            if vertex not in visited:
+                print(vertex, end=" ")
+                visited.add(vertex)
+                queue.extend(neighbor for neighbor in self.graph.get(vertex, []) if neighbor not in visited)
+
+    def dfs(self, start_vertex):
+        visited = set()
+
+        def dfs_recursive(vertex):
+            print(vertex, end=" ")
+            visited.add(vertex)
+            for neighbor in self.graph.get(vertex, []):
+                if neighbor not in visited:
+                    dfs_recursive(neighbor)
+
+        dfs_recursive(start_vertex)
+
+
+# Example graph
+graph = Graph()
+graph.add_edge(0, 1)
+graph.add_edge(0, 2)
+graph.add_edge(1, 2)
+graph.add_edge(2, 0)
+graph.add_edge(2, 3)
+graph.add_edge(3, 3)
+
+start_vertex = 2
+
+print("BFS starting from vertex", start_vertex)
+graph.bfs(start_vertex)
+print("\nDFS starting from vertex", start_vertex)
+graph.dfs(start_vertex)

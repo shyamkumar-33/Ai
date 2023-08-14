@@ -1,0 +1,46 @@
+#from queue import PriorityQueue
+
+def greedy_best_first_search(graph, start, goal, heuristic):
+    visited = set()
+    pq = PriorityQueue()
+    pq.put((heuristic[start], start))
+    
+    while not pq.empty():
+        _, current_node = pq.get()
+        
+        if current_node == goal:
+            return True
+        
+        visited.add(current_node)
+        
+        for neighbor, _ in graph[current_node]:
+            if neighbor not in visited:
+                pq.put((heuristic[neighbor], neighbor))
+    
+    return False
+
+# Example graph represented as an adjacency list with distances
+graph = {
+    'A': [('B', 4), ('C', 5)],
+    'B': [('A', 4), ('C', 2), ('D', 6)],
+    'C': [('A', 5), ('B', 2), ('D', 3)],
+    'D': [('B', 6), ('C', 3)]
+}
+
+# Heuristic values for each node
+heuristic = {
+    'A': 7,
+    'B': 3,
+    'C': 2,
+    'D': 1
+}
+
+start_node = 'A'
+goal_node = 'D'
+
+found = greedy_best_first_search(graph, start_node, goal_node, heuristic)
+
+if found:
+    print("Path found from", start_node, "to", goal_node)
+else:
+    print("No path found from", start_node, "to", goal_node)

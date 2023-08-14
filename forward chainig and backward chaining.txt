@@ -1,0 +1,23 @@
+% Forward chaining example
+
+% Define family relationships
+parent(john, mary).
+parent(john, tom).
+parent(mary, ann).
+parent(tom, jim).
+
+% Define rules for ancestor relationship using forward chaining
+ancestor(X, Y) :- parent(X, Y).
+ancestor(X, Y) :- parent(X, Z), ancestor(Z, Y).
+
+% Query for ancestors using forward chaining
+% ancestor(john, jim). % Uncomment this line to query
+
+% Backward chaining example
+
+% Define rules for ancestor relationship using backward chaining
+descendant(X, Y) :- parent(Y, X).
+descendant(X, Y) :- parent(Z, X), descendant(Z, Y).
+
+% Query for descendants using backward chaining
+% descendant(jim, john). % Uncomment this line to query

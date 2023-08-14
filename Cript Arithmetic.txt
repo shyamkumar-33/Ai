@@ -1,0 +1,51 @@
+def solve_cryptarithmetic(puzzle):
+    letters = set(ch for word in puzzle[:-1] for ch in word)
+    first_letters = set(word[0] for word in puzzle)
+    
+    def is_solution_valid(mapping):
+        num1 = int("".join(str(mapping[ch]) for ch in puzzle[0]))
+        num2 = int("".join(str(mapping[ch]) for ch in puzzle[1]))
+        target = int("".join(str(mapping[ch]) for ch in puzzle[2]))
+        
+        return num1 + num2 == target
+    
+    def recursive_solve(index, mapping):
+        if index == len(letters):
+            if is_solution_valid(mapping):
+                return mapping.copy()
+            return None
+        
+        for digit in range(10):
+            if digit == 0 and puzzle[index] in first_letters:
+                continue
+                
+            if digit not in mapping.values():
+                new_mapping = mapping.copy()
+                new_mapping[letters[index]] = digit
+                result = recursive_solve(index + 1, new_mapping)
+                if result:
+                    return result
+        
+        return None
+    
+    initial_mapping = {ch: -1 for ch in letters}
+    solution = recursive_solve(0, initial_mapping)
+    
+    return solution
+
+# Example usage
+puzzle = ["send", "more", "money"]
+solution = solve_cryptarithmetic(puzzle)
+
+if solution:
+    print("Solution:")
+    for ch, digit in solution.items():
+        print(f"{ch} = {digit}")
+    
+    print("\nSubstitution:")
+    for word in puzzle:
+        substituted_word = "".join(str(solution[ch]) for ch in word)
+        print(substituted_word, end=" ")
+    print()
+else:
+    print("No solution exists.")

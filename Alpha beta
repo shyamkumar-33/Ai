@@ -1,0 +1,68 @@
+def evaluate(board):
+    # Same evaluation function as before
+    # ...
+
+def is_moves_left(board):
+    return any(cell == ' ' for cell in board)
+
+def minimax(board, depth, is_maximizing, alpha, beta):
+    score = evaluate(board)
+
+    if score == 10:
+        return score
+    if score == -10:
+        return score
+    if not is_moves_left(board):
+        return 0
+
+    if is_maximizing:
+        best_score = -float('inf')
+        for i in range(9):
+            if board[i] == ' ':
+                board[i] = 'X'
+                best_score = max(best_score, minimax(board, depth + 1, False, alpha, beta))
+                board[i] = ' '
+                alpha = max(alpha, best_score)
+                if beta <= alpha:
+                    break
+        return best_score
+    else:
+        best_score = float('inf')
+        for i in range(9):
+            if board[i] == ' ':
+                board[i] = 'O'
+                best_score = min(best_score, minimax(board, depth + 1, True, alpha, beta))
+                board[i] = ' '
+                beta = min(beta, best_score)
+                if beta <= alpha:
+                    break
+        return best_score
+
+def find_best_move(board):
+    best_move = -1
+    best_score = -float('inf')
+    alpha = -float('inf')
+    beta = float('inf')
+    
+    for i in range(9):
+        if board[i] == ' ':
+            board[i] = 'X'
+            move_score = minimax(board, 0, False, alpha, beta)
+            board[i] = ' '
+
+            if move_score > best_score:
+                best_score = move_score
+                best_move = i
+
+            alpha = max(alpha, best_score)
+            if beta <= alpha:
+                break
+
+    return best_move
+
+# Rest of the code is the same as before
+# ...
+
+if __name__ == "__main__":
+    # Rest of the main code remains the same
+    # ...
